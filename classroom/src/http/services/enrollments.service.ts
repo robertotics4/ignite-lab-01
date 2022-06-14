@@ -6,6 +6,11 @@ interface GetByCourseAndStudentIdParams {
   studentId: string;
 }
 
+interface CreateEnrollmentParams {
+  courseId: string;
+  studentId: string;
+}
+
 @Injectable()
 export class EnrollmentsService {
   constructor(private prisma: PrismaService) {}
@@ -21,7 +26,7 @@ export class EnrollmentsService {
     });
   }
 
-  async listEnrollmentsByStudent(studentId) {
+  async listEnrollmentsByStudent(studentId: string) {
     return this.prisma.enrollment.findMany({
       where: {
         studentId,
@@ -42,6 +47,15 @@ export class EnrollmentsService {
         courseId,
         studentId,
         canceledAt: null,
+      },
+    });
+  }
+
+  async createEnrollment({ courseId, studentId }: CreateEnrollmentParams) {
+    return this.prisma.enrollment.create({
+      data: {
+        courseId,
+        studentId,
       },
     });
   }
